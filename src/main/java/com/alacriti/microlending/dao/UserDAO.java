@@ -23,14 +23,14 @@ public class UserDAO {
 	JdbcTemplate jdbcTemplate = new JdbcTemplate();
 	
 	public int userSearchDAO(String username){
-		String sql = "select count(*) from AL372_Users where username='"+username+"';";
+		String sql = "select count(*) from AL372_users where username='"+username+"';";
 		int preUserPresence = 0;
 		preUserPresence = jdbcTemplate.queryForObject(sql,Integer.class);
 		return preUserPresence;
 	}
 	
 	public int userSignUPDAO(UserSignUpVO user){
-		String sql = "insert into AL372_Users(username, password, name, age, contact_number) values(?,?,?,?,?);";
+		String sql = "insert into AL372_users(username, password, name, age, contact_number) values(?,?,?,?,?);";
 		int effectedRows = jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getName(), user.getAge(), user.getContactNumber());
 		return effectedRows;
 	}
@@ -39,7 +39,7 @@ public class UserDAO {
 	public UserLogInOutputVO userLogInDAO(UserLogInVO user){
 		UserLogInOutputVO userOutput;
 		try{
-			String sql = "Select * from AL372_Users where username=? and password=?;";		
+			String sql = "Select * from AL372_users where username=? and password=?;";		
 			userOutput = jdbcTemplate.queryForObject(sql, new Object[]{user.getUsername(),user.getPassword()},
 	                (rs, rowNum) ->
 	                       new UserLogInOutputVO(
@@ -59,14 +59,14 @@ public class UserDAO {
 	}
 	
 	public int userUpdateBankId(int userId,int bankId){
-		String sql = "update AL372_Users set bank_id = ? where user_id = ?;";
+		String sql = "update AL372_users set bank_id = ? where user_id = ?;";
 		int effectedRows = jdbcTemplate.update(sql,bankId,userId);
 		return effectedRows;
 	}
 	
 	public List<UserLogInOutputVO> userGetAllUsersDAO(int userId){
 		List<UserLogInOutputVO> users;
-		String sql = "select * from AL372_Users where user_id <> ?";
+		String sql = "select * from AL372_users where user_id <> ?";
 		users = jdbcTemplate.query(sql, new Object[]{userId},
 					(rs, rowNum) -> new UserLogInOutputVO(
 							rs.getInt("user_id"),
@@ -84,7 +84,7 @@ public class UserDAO {
 	public UserLogInOutputVO getUserById(int userId){
 		UserLogInOutputVO user;
 		try{
-			String sql = "select * from AL372_Users where user_id =?";
+			String sql = "select * from AL372_users where user_id =?";
 			user = jdbcTemplate.queryForObject(sql, new Object[]{userId},
 						(rs, rowNum)->
 							new UserLogInOutputVO(

@@ -78,7 +78,7 @@ public class UserService {
 	public ResponseEntity<?> userGetAllUsersService(int userId){
 		try{
 			List<UserLogInOutputVO> users = userDAO.userGetAllUsersDAO(userId);
-			if(users == null){
+			if(users.isEmpty()){
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 			return new ResponseEntity<List<UserLogInOutputVO>>(users, HttpStatus.OK);

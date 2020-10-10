@@ -34,7 +34,7 @@ public class BankDAO {
     UserDAO userDAO = new UserDAO();
     
 	public ResponseEntity<?> bankAddDAO(int userId,BankAddingVO bankDetails){
-		String sql = "insert into AL372_BankDetails(account_number,bank_name,branch,ifsccode) values(?,?,?,?)";
+		String sql = "insert into AL372_bank_details(account_number,bank_name,branch,ifsccode) values(?,?,?,?)";
 		KeyHolder holder = new GeneratedKeyHolder();
 
 		jdbcTemplate.update(new PreparedStatementCreator() {           
@@ -57,7 +57,7 @@ public class BankDAO {
 		}
 		else{
 			int bankIdValue = bankId.intValue();
-			String sql2 = "update AL372_Users set bank_id = ? where user_id = ?;";
+			String sql2 = "update AL372_users set bank_id = ? where user_id = ?;";
 			int effectedRows = jdbcTemplate.update(sql2,bankIdValue,userId);
 			if(effectedRows == 1){
 				return new ResponseEntity<>(HttpStatus.ACCEPTED);
@@ -71,7 +71,7 @@ public class BankDAO {
 	public BankGettingVO bankGetDetails(int bankId) {
 		try{
 			BankGettingVO bankDetailsOutput;
-			String sql = "Select * from AL372_BankDetails where bank_id =?;";		
+			String sql = "Select * from AL372_bank_details where bank_id =?;";		
 			bankDetailsOutput =  jdbcTemplate.queryForObject(sql, new Object[]{bankId}, 
 						(rs, rowNum) -> 
 							new BankGettingVO(
@@ -89,23 +89,4 @@ public class BankDAO {
 	}
 }
 
-/*public ResponseEntity<?> bankAddDAO(int userId,BankAddingVO bankDetails){
-		SqlParameterSource parameters = new BeanPropertySqlParameterSource(bankDetails);
-		Number bankId = jdbcInsert.executeAndReturnKey(parameters);
-		//return bankId;
-		if(bankId == null){
-			return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-		}
-		else{
-			int bankIdValue = bankId.intValue();
-			//int effectedRows = userDAO.userUpdateBankId(userId, bankIdValue);
-			String sql = "update AL372_Users set bank_id = ? where user_id = ?;";
-			int effectedRows = jdbcTemplate.update(sql,bankIdValue,userId);
-			if(effectedRows == 1){
-				return new ResponseEntity<>(HttpStatus.ACCEPTED);
-			}
-			else{
-				return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-			}
-		}
-	}*/
+
