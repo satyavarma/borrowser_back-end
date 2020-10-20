@@ -81,6 +81,24 @@ public class UserDAO {
 		return users;
 	}
 	
+	public List<UserLogInOutputVO> getUsersByNameService(int userId, String searchName) {
+		String upperCaseSearchNameForSearch = "%"+searchName.toUpperCase()+"%";
+		List<UserLogInOutputVO> users;
+		String sql = "select * from AL372_users where UPPER(name) LIKE ? and user_id <> ? ;";
+		users = jdbcTemplate.query(sql, new Object[]{upperCaseSearchNameForSearch,userId},
+					(rs, rowNum) -> new UserLogInOutputVO(
+							rs.getInt("user_id"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("name"),
+                            rs.getString("contact_number"),
+                            rs.getInt("bank_id"),
+                            rs.getInt("age")
+						)
+				);
+		return users;
+	}
+	
 	public UserLogInOutputVO getUserById(int userId){
 		UserLogInOutputVO user;
 		try{
@@ -102,4 +120,6 @@ public class UserDAO {
 			return null;
 		}
 	}
+
+	
 }

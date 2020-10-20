@@ -45,6 +45,14 @@ public class LoanResource {
 		return loanService.getSentRequestsService(userId);
 	}
 	
+	@GET
+	@Path("/notificationRequests/{userId}")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public ResponseEntity<?> getNotificationRequestsResource(@PathParam("userId") int userId){
+		return loanService.getNotificationRequestsService(userId);
+	}
+	
 	@POST
 	@Path("/changeStatus/{requestId}/{statusValue}")
 	@Consumes("application/json")

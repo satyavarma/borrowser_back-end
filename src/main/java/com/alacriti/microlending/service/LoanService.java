@@ -114,4 +114,20 @@ public class LoanService {
 			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
 		}
 	}
+
+	public ResponseEntity<?> getNotificationRequestsService(int userId) {
+		try{
+			List<LoanGettingVO> loans = loanDAO.getNotificationRequestsDAO(userId);
+			if(loans.isEmpty()){
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+			else{
+				return new ResponseEntity<List<LoanGettingVO>>(loans, HttpStatus.OK);
+			}
+		}
+		catch(Exception e){
+			logger.debug("Exception"+e);
+			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
 }

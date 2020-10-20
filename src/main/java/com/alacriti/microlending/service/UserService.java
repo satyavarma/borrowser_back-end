@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -66,6 +67,9 @@ public class UserService {
 			if(userOutput == null){
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}else{
+				//HttpHeaders headers = new HttpHeaders();
+				//headers.add("Set-Cookie","platform=mobile; Max-Age=604800; Path=/; Secure; HttpOnly");
+				//return ResponseEntity.status(HttpStatus.OK).headers(headers).build();
 				return new ResponseEntity<UserLogInOutputVO>(userOutput, HttpStatus.OK);
 			}
 		}
@@ -103,6 +107,20 @@ public class UserService {
 		}
 		
 	}
+
+	public ResponseEntity<?> getUsersByNameService(int userId, String searchName) {
+		try{
+			List<UserLogInOutputVO> users = userDAO.getUsersByNameService(userId,searchName);
+			if(users.isEmpty()){
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<List<UserLogInOutputVO>>(users, HttpStatus.OK);
+		}
+		catch(Exception e){
+			logger.debug("Exception"+e);
+			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+		}
+	}
 	
 	public ResponseEntity<?> inviteByMailService(String mailId){
 		try { 
@@ -137,4 +155,6 @@ public class UserService {
         	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }   
 	}
+
+	
 }

@@ -145,4 +145,24 @@ public class LoanDAO {
 				);
 		return transactions;
 	}
+
+	public List<LoanGettingVO> getNotificationRequestsDAO(int userId) {
+		List<LoanGettingVO> loans;
+		String sql = "select * from AL372_loan_requests where borrower_id = ? and request_status = 3";
+		loans = jdbcTemplate.query(sql, new Object[]{userId},
+					(rs, rowNum) -> new LoanGettingVO(
+							rs.getInt("request_id"),
+							rs.getInt("borrower_id"),
+							rs.getInt("lender_id"),
+							rs.getString("borrower_name"),
+							rs.getString("lender_name"),
+							rs.getInt("loan_amount"),
+							rs.getInt("tenure"),
+							rs.getString("loan_reason"),
+							rs.getInt("request_status"),
+							""+rs.getDate("loan_accepted_date")
+						)
+				);
+		return loans;
+	}
 }
